@@ -1,0 +1,503 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="veritabani.randevuModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Doktorlar">
+          <Key>
+            <PropertyRef Name="doktorId" />
+          </Key>
+          <Property Name="doktorId" Type="int" Nullable="false" />
+          <Property Name="dahiliyedok" Type="varchar" MaxLength="50" />
+          <Property Name="kbbdok" Type="varchar" MaxLength="50" />
+          <Property Name="onkolojidok" Type="varchar" MaxLength="50" />
+          <Property Name="çocukdok" Type="varchar" MaxLength="50" />
+          <Property Name="kalpdamardok" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Hastaneadi">
+          <Key>
+            <PropertyRef Name="hastaneId" />
+          </Key>
+          <Property Name="hastaneId" Type="int" Nullable="false" />
+          <Property Name="dokuzeylul" Type="varchar" MaxLength="50" />
+          <Property Name="mentesedevlet" Type="varchar" MaxLength="50" />
+          <Property Name="ankarahastanesi" Type="varchar" MaxLength="50" />
+          <Property Name="istanbulhastanesi" Type="varchar" MaxLength="50" />
+          <Property Name="bursahastanesi" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Poliklinikler">
+          <Key>
+            <PropertyRef Name="poliklinikId" />
+          </Key>
+          <Property Name="poliklinikId" Type="int" Nullable="false" />
+          <Property Name="kalpdamar" Type="varchar" MaxLength="50" />
+          <Property Name="kbb" Type="varchar" MaxLength="50" />
+          <Property Name="onkoloji" Type="varchar" MaxLength="50" />
+          <Property Name="çocukpol" Type="varchar" MaxLength="50" />
+          <Property Name="dahiliye" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Randevu">
+          <Key>
+            <PropertyRef Name="randevuId" />
+          </Key>
+          <Property Name="randevuId" Type="int" Nullable="false" />
+          <Property Name="usersId" Type="int" />
+          <Property Name="doktorId" Type="int" />
+          <Property Name="poliklinikId" Type="int" />
+          <Property Name="sehirId" Type="int" />
+          <Property Name="hastaneId" Type="int" />
+        </EntityType>
+        <EntityType Name="Sehir">
+          <Key>
+            <PropertyRef Name="sehirId" />
+          </Key>
+          <Property Name="sehirId" Type="int" Nullable="false" />
+          <Property Name="hastaneId" Type="int" />
+          <Property Name="izmir" Type="varchar" MaxLength="50" />
+          <Property Name="mugla" Type="varchar" MaxLength="50" />
+          <Property Name="ankara" Type="varchar" MaxLength="50" />
+          <Property Name="istanbul" Type="varchar" MaxLength="50" />
+          <Property Name="bursa" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="usersId" />
+          </Key>
+          <Property Name="usersId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Age" Type="varchar" MaxLength="50" />
+          <Property Name="Tc" Type="varchar" MaxLength="50" />
+          <Property Name="email" Type="varchar" MaxLength="50" />
+          <Property Name="sifre" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_Poliklinikler_ToTable">
+          <End Role="Doktorlar" Type="Self.Doktorlar" Multiplicity="1" />
+          <End Role="Poliklinikler" Type="Self.Poliklinikler" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Doktorlar">
+              <PropertyRef Name="doktorId" />
+            </Principal>
+            <Dependent Role="Poliklinikler">
+              <PropertyRef Name="poliklinikId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Randevu_ToTable">
+          <End Role="Doktorlar" Type="Self.Doktorlar" Multiplicity="0..1" />
+          <End Role="Randevu" Type="Self.Randevu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doktorlar">
+              <PropertyRef Name="doktorId" />
+            </Principal>
+            <Dependent Role="Randevu">
+              <PropertyRef Name="doktorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Randevu_ToTable_1">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Randevu" Type="Self.Randevu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="usersId" />
+            </Principal>
+            <Dependent Role="Randevu">
+              <PropertyRef Name="usersId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Randevu_ToTable_2">
+          <End Role="Poliklinikler" Type="Self.Poliklinikler" Multiplicity="0..1" />
+          <End Role="Randevu" Type="Self.Randevu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Poliklinikler">
+              <PropertyRef Name="poliklinikId" />
+            </Principal>
+            <Dependent Role="Randevu">
+              <PropertyRef Name="poliklinikId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Randevu_ToTable_3">
+          <End Role="Sehir" Type="Self.Sehir" Multiplicity="0..1" />
+          <End Role="Randevu" Type="Self.Randevu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sehir">
+              <PropertyRef Name="sehirId" />
+            </Principal>
+            <Dependent Role="Randevu">
+              <PropertyRef Name="sehirId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Randevu_ToTable_4">
+          <End Role="Hastaneadi" Type="Self.Hastaneadi" Multiplicity="0..1" />
+          <End Role="Randevu" Type="Self.Randevu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Hastaneadi">
+              <PropertyRef Name="hastaneId" />
+            </Principal>
+            <Dependent Role="Randevu">
+              <PropertyRef Name="hastaneId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sehir_ToTable">
+          <End Role="Hastaneadi" Type="Self.Hastaneadi" Multiplicity="0..1" />
+          <End Role="Sehir" Type="Self.Sehir" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Hastaneadi">
+              <PropertyRef Name="hastaneId" />
+            </Principal>
+            <Dependent Role="Sehir">
+              <PropertyRef Name="hastaneId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="veritabanirandevuModelStoreContainer">
+          <EntitySet Name="Doktorlar" EntityType="Self.Doktorlar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Hastaneadi" EntityType="Self.Hastaneadi" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Poliklinikler" EntityType="Self.Poliklinikler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Randevu" EntityType="Self.Randevu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sehir" EntityType="Self.Sehir" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Poliklinikler_ToTable" Association="Self.FK_Poliklinikler_ToTable">
+            <End Role="Doktorlar" EntitySet="Doktorlar" />
+            <End Role="Poliklinikler" EntitySet="Poliklinikler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Randevu_ToTable" Association="Self.FK_Randevu_ToTable">
+            <End Role="Doktorlar" EntitySet="Doktorlar" />
+            <End Role="Randevu" EntitySet="Randevu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Randevu_ToTable_1" Association="Self.FK_Randevu_ToTable_1">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Randevu" EntitySet="Randevu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Randevu_ToTable_2" Association="Self.FK_Randevu_ToTable_2">
+            <End Role="Poliklinikler" EntitySet="Poliklinikler" />
+            <End Role="Randevu" EntitySet="Randevu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Randevu_ToTable_3" Association="Self.FK_Randevu_ToTable_3">
+            <End Role="Sehir" EntitySet="Sehir" />
+            <End Role="Randevu" EntitySet="Randevu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Randevu_ToTable_4" Association="Self.FK_Randevu_ToTable_4">
+            <End Role="Hastaneadi" EntitySet="Hastaneadi" />
+            <End Role="Randevu" EntitySet="Randevu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sehir_ToTable" Association="Self.FK_Sehir_ToTable">
+            <End Role="Hastaneadi" EntitySet="Hastaneadi" />
+            <End Role="Sehir" EntitySet="Sehir" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="veritabani.randevuModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Doktorlar">
+          <Key>
+            <PropertyRef Name="doktorId" />
+          </Key>
+          <Property Name="doktorId" Type="Int32" Nullable="false" />
+          <Property Name="dahiliyedok" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="kbbdok" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="onkolojidok" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="çocukdok" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="kalpdamardok" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Poliklinikler" Relationship="Self.FK_Poliklinikler_ToTable" FromRole="Doktorlar" ToRole="Poliklinikler" />
+          <NavigationProperty Name="Randevu" Relationship="Self.FK_Randevu_ToTable" FromRole="Doktorlar" ToRole="Randevu" />
+        </EntityType>
+        <EntityType Name="Hastaneadi">
+          <Key>
+            <PropertyRef Name="hastaneId" />
+          </Key>
+          <Property Name="hastaneId" Type="Int32" Nullable="false" />
+          <Property Name="dokuzeylul" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="mentesedevlet" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ankarahastanesi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="istanbulhastanesi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="bursahastanesi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Randevu" Relationship="Self.FK_Randevu_ToTable_4" FromRole="Hastaneadi" ToRole="Randevu" />
+          <NavigationProperty Name="Sehir" Relationship="Self.FK_Sehir_ToTable" FromRole="Hastaneadi" ToRole="Sehir" />
+        </EntityType>
+        <EntityType Name="Poliklinikler">
+          <Key>
+            <PropertyRef Name="poliklinikId" />
+          </Key>
+          <Property Name="poliklinikId" Type="Int32" Nullable="false" />
+          <Property Name="kalpdamar" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="kbb" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="onkoloji" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="çocukpol" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="dahiliye" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Doktorlar" Relationship="Self.FK_Poliklinikler_ToTable" FromRole="Poliklinikler" ToRole="Doktorlar" />
+          <NavigationProperty Name="Randevu" Relationship="Self.FK_Randevu_ToTable_2" FromRole="Poliklinikler" ToRole="Randevu" />
+        </EntityType>
+        <EntityType Name="Randevu">
+          <Key>
+            <PropertyRef Name="randevuId" />
+          </Key>
+          <Property Name="randevuId" Type="Int32" Nullable="false" />
+          <Property Name="usersId" Type="Int32" />
+          <Property Name="doktorId" Type="Int32" />
+          <Property Name="poliklinikId" Type="Int32" />
+          <Property Name="sehirId" Type="Int32" />
+          <Property Name="hastaneId" Type="Int32" />
+          <NavigationProperty Name="Doktorlar" Relationship="Self.FK_Randevu_ToTable" FromRole="Randevu" ToRole="Doktorlar" />
+          <NavigationProperty Name="Hastaneadi" Relationship="Self.FK_Randevu_ToTable_4" FromRole="Randevu" ToRole="Hastaneadi" />
+          <NavigationProperty Name="Poliklinikler" Relationship="Self.FK_Randevu_ToTable_2" FromRole="Randevu" ToRole="Poliklinikler" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Randevu_ToTable_1" FromRole="Randevu" ToRole="Users" />
+          <NavigationProperty Name="Sehir" Relationship="Self.FK_Randevu_ToTable_3" FromRole="Randevu" ToRole="Sehir" />
+        </EntityType>
+        <EntityType Name="Sehir">
+          <Key>
+            <PropertyRef Name="sehirId" />
+          </Key>
+          <Property Name="sehirId" Type="Int32" Nullable="false" />
+          <Property Name="hastaneId" Type="Int32" />
+          <Property Name="izmir" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="mugla" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ankara" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="istanbul" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="bursa" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Hastaneadi" Relationship="Self.FK_Sehir_ToTable" FromRole="Sehir" ToRole="Hastaneadi" />
+          <NavigationProperty Name="Randevu" Relationship="Self.FK_Randevu_ToTable_3" FromRole="Sehir" ToRole="Randevu" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="usersId" />
+          </Key>
+          <Property Name="usersId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Age" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Tc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="sifre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Randevu" Relationship="Self.FK_Randevu_ToTable_1" FromRole="Users" ToRole="Randevu" />
+        </EntityType>
+        <Association Name="FK_Poliklinikler_ToTable">
+          <End Role="Doktorlar" Type="Self.Doktorlar" Multiplicity="1" />
+          <End Role="Poliklinikler" Type="Self.Poliklinikler" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Doktorlar">
+              <PropertyRef Name="doktorId" />
+            </Principal>
+            <Dependent Role="Poliklinikler">
+              <PropertyRef Name="poliklinikId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Randevu_ToTable">
+          <End Role="Doktorlar" Type="Self.Doktorlar" Multiplicity="0..1" />
+          <End Role="Randevu" Type="Self.Randevu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doktorlar">
+              <PropertyRef Name="doktorId" />
+            </Principal>
+            <Dependent Role="Randevu">
+              <PropertyRef Name="doktorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Randevu_ToTable_4">
+          <End Role="Hastaneadi" Type="Self.Hastaneadi" Multiplicity="0..1" />
+          <End Role="Randevu" Type="Self.Randevu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Hastaneadi">
+              <PropertyRef Name="hastaneId" />
+            </Principal>
+            <Dependent Role="Randevu">
+              <PropertyRef Name="hastaneId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sehir_ToTable">
+          <End Role="Hastaneadi" Type="Self.Hastaneadi" Multiplicity="0..1" />
+          <End Role="Sehir" Type="Self.Sehir" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Hastaneadi">
+              <PropertyRef Name="hastaneId" />
+            </Principal>
+            <Dependent Role="Sehir">
+              <PropertyRef Name="hastaneId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Randevu_ToTable_2">
+          <End Role="Poliklinikler" Type="Self.Poliklinikler" Multiplicity="0..1" />
+          <End Role="Randevu" Type="Self.Randevu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Poliklinikler">
+              <PropertyRef Name="poliklinikId" />
+            </Principal>
+            <Dependent Role="Randevu">
+              <PropertyRef Name="poliklinikId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Randevu_ToTable_1">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Randevu" Type="Self.Randevu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="usersId" />
+            </Principal>
+            <Dependent Role="Randevu">
+              <PropertyRef Name="usersId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Randevu_ToTable_3">
+          <End Role="Sehir" Type="Self.Sehir" Multiplicity="0..1" />
+          <End Role="Randevu" Type="Self.Randevu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sehir">
+              <PropertyRef Name="sehirId" />
+            </Principal>
+            <Dependent Role="Randevu">
+              <PropertyRef Name="sehirId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Doktorlar" EntityType="Self.Doktorlar" />
+          <EntitySet Name="Hastaneadi" EntityType="Self.Hastaneadi" />
+          <EntitySet Name="Poliklinikler" EntityType="Self.Poliklinikler" />
+          <EntitySet Name="Randevu" EntityType="Self.Randevu" />
+          <EntitySet Name="Sehir" EntityType="Self.Sehir" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <AssociationSet Name="FK_Poliklinikler_ToTable" Association="Self.FK_Poliklinikler_ToTable">
+            <End Role="Doktorlar" EntitySet="Doktorlar" />
+            <End Role="Poliklinikler" EntitySet="Poliklinikler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Randevu_ToTable" Association="Self.FK_Randevu_ToTable">
+            <End Role="Doktorlar" EntitySet="Doktorlar" />
+            <End Role="Randevu" EntitySet="Randevu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Randevu_ToTable_4" Association="Self.FK_Randevu_ToTable_4">
+            <End Role="Hastaneadi" EntitySet="Hastaneadi" />
+            <End Role="Randevu" EntitySet="Randevu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sehir_ToTable" Association="Self.FK_Sehir_ToTable">
+            <End Role="Hastaneadi" EntitySet="Hastaneadi" />
+            <End Role="Sehir" EntitySet="Sehir" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Randevu_ToTable_2" Association="Self.FK_Randevu_ToTable_2">
+            <End Role="Poliklinikler" EntitySet="Poliklinikler" />
+            <End Role="Randevu" EntitySet="Randevu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Randevu_ToTable_1" Association="Self.FK_Randevu_ToTable_1">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Randevu" EntitySet="Randevu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Randevu_ToTable_3" Association="Self.FK_Randevu_ToTable_3">
+            <End Role="Sehir" EntitySet="Sehir" />
+            <End Role="Randevu" EntitySet="Randevu" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="veritabanirandevuModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Doktorlar">
+            <EntityTypeMapping TypeName="veritabani.randevuModel.Doktorlar">
+              <MappingFragment StoreEntitySet="Doktorlar">
+                <ScalarProperty Name="doktorId" ColumnName="doktorId" />
+                <ScalarProperty Name="dahiliyedok" ColumnName="dahiliyedok" />
+                <ScalarProperty Name="kbbdok" ColumnName="kbbdok" />
+                <ScalarProperty Name="onkolojidok" ColumnName="onkolojidok" />
+                <ScalarProperty Name="çocukdok" ColumnName="çocukdok" />
+                <ScalarProperty Name="kalpdamardok" ColumnName="kalpdamardok" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Hastaneadi">
+            <EntityTypeMapping TypeName="veritabani.randevuModel.Hastaneadi">
+              <MappingFragment StoreEntitySet="Hastaneadi">
+                <ScalarProperty Name="hastaneId" ColumnName="hastaneId" />
+                <ScalarProperty Name="dokuzeylul" ColumnName="dokuzeylul" />
+                <ScalarProperty Name="mentesedevlet" ColumnName="mentesedevlet" />
+                <ScalarProperty Name="ankarahastanesi" ColumnName="ankarahastanesi" />
+                <ScalarProperty Name="istanbulhastanesi" ColumnName="istanbulhastanesi" />
+                <ScalarProperty Name="bursahastanesi" ColumnName="bursahastanesi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Poliklinikler">
+            <EntityTypeMapping TypeName="veritabani.randevuModel.Poliklinikler">
+              <MappingFragment StoreEntitySet="Poliklinikler">
+                <ScalarProperty Name="poliklinikId" ColumnName="poliklinikId" />
+                <ScalarProperty Name="kalpdamar" ColumnName="kalpdamar" />
+                <ScalarProperty Name="kbb" ColumnName="kbb" />
+                <ScalarProperty Name="onkoloji" ColumnName="onkoloji" />
+                <ScalarProperty Name="çocukpol" ColumnName="çocukpol" />
+                <ScalarProperty Name="dahiliye" ColumnName="dahiliye" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Randevu">
+            <EntityTypeMapping TypeName="veritabani.randevuModel.Randevu">
+              <MappingFragment StoreEntitySet="Randevu">
+                <ScalarProperty Name="randevuId" ColumnName="randevuId" />
+                <ScalarProperty Name="usersId" ColumnName="usersId" />
+                <ScalarProperty Name="doktorId" ColumnName="doktorId" />
+                <ScalarProperty Name="poliklinikId" ColumnName="poliklinikId" />
+                <ScalarProperty Name="sehirId" ColumnName="sehirId" />
+                <ScalarProperty Name="hastaneId" ColumnName="hastaneId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sehir">
+            <EntityTypeMapping TypeName="veritabani.randevuModel.Sehir">
+              <MappingFragment StoreEntitySet="Sehir">
+                <ScalarProperty Name="sehirId" ColumnName="sehirId" />
+                <ScalarProperty Name="hastaneId" ColumnName="hastaneId" />
+                <ScalarProperty Name="izmir" ColumnName="izmir" />
+                <ScalarProperty Name="mugla" ColumnName="mugla" />
+                <ScalarProperty Name="ankara" ColumnName="ankara" />
+                <ScalarProperty Name="istanbul" ColumnName="istanbul" />
+                <ScalarProperty Name="bursa" ColumnName="bursa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="veritabani.randevuModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="usersId" ColumnName="usersId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="Tc" ColumnName="Tc" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="sifre" ColumnName="sifre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
